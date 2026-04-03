@@ -1,0 +1,16 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between mb-3"><h2>📄 Resume Preview</h2><div><button onclick="window.print()" class="btn btn-success"><i class="fas fa-print"></i> Save as PDF</button><a href="{{ url_for('resume_builder') }}" class="btn btn-primary">Edit</a></div></div>
+    <div id="resume-preview" class="resume-container {{ template }}">
+        {% if template == 'professional' %}
+            <div class="professional"><h1>{{ full_name }}</h1><p>{{ email }} | {{ phone }} | {{ address }}</p><hr><h3>Summary</h3><p>{{ summary }}</p><h3>Skills</h3><ul>{% for s in skills %}<li>{{ s }}</li>{% endfor %}</ul><h3>Projects</h3>{% for p in projects %}<div><strong>{{ p.title }}</strong><p>{{ p.description }}</p></div>{% endfor %}<h3>Education</h3>{% for e in education %}<div><strong>{{ e.degree }}</strong>, {{ e.institution }} ({{ e.year }})</div>{% endfor %}<h3>Experience</h3>{% for ex in experience %}<div><strong>{{ ex.title }}</strong> at {{ ex.company }} ({{ ex.duration }})<p>{{ ex.description }}</p></div>{% endfor %}</div>
+        {% elif template == 'modern' %}
+            <div class="modern row"><div class="col-md-4 sidebar bg-dark text-white p-3"><h2>{{ full_name }}</h2><p><i class="fas fa-envelope"></i> {{ email }}</p><p><i class="fas fa-phone"></i> {{ phone }}</p><p><i class="fas fa-map-marker-alt"></i> {{ address }}</p><hr><h4>Skills</h4><ul>{% for s in skills %}<li>{{ s }}</li>{% endfor %}</ul></div><div class="col-md-8 p-3"><h3>Summary</h3><p>{{ summary }}</p><h3>Projects</h3>{% for p in projects %}<div><strong>{{ p.title }}</strong><p>{{ p.description }}</p></div>{% endfor %}<h3>Education</h3>{% for e in education %}<div><strong>{{ e.degree }}</strong>, {{ e.institution }} ({{ e.year }})</div>{% endfor %}<h3>Experience</h3>{% for ex in experience %}<div><strong>{{ ex.title }}</strong> at {{ ex.company }} ({{ ex.duration }})<p>{{ ex.description }}</p></div>{% endfor %}</div></div>
+        {% else %}
+            <div class="minimal"><h1>{{ full_name }}</h1><p>{{ email }} • {{ phone }} • {{ address }}</p><p><em>{{ summary }}</em></p><hr><strong>Skills:</strong> {{ skills|join(", ") }}<hr><h3>Projects</h3>{% for p in projects %}<div><b>{{ p.title }}</b><br>{{ p.description }}</div><br>{% endfor %}<h3>Education</h3>{% for e in education %}<div><b>{{ e.degree }}</b>, {{ e.institution }} ({{ e.year }})</div>{% endfor %}<h3>Experience</h3>{% for ex in experience %}<div><b>{{ ex.title }}</b> at {{ ex.company }} ({{ ex.duration }})<br>{{ ex.description }}</div><br>{% endfor %}</div>
+        {% endif %}
+    </div>
+</div>
+<style>@media print{.btn,.navbar,.d-flex{display:none;}.resume-container{margin:0;padding:0;}}.resume-container{max-width:800px;margin:auto;background:white;padding:20px;box-shadow:0 0 10px rgba(0,0,0,0.1);}.modern .sidebar{background:#2c3e50;color:white;}</style>
+{% endblock %}

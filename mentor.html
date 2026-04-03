@@ -1,0 +1,20 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="row"><div class="col-md-8 mx-auto"><div class="card shadow"><div class="card-header bg-success text-white"><h4>🤖 AI Mentor</h4></div><div class="card-body">
+<div id="chatBox" style="height:400px; overflow-y:auto; border:1px solid #ddd; padding:10px; margin-bottom:10px;">
+    <div class="alert alert-secondary">Mentor: Hello! Ask me anything about placements, resume, or interview prep.</div>
+</div>
+<div class="input-group"><input type="text" id="userQuestion" class="form-control" placeholder="Ask your mentor..."><button id="askBtn" class="btn btn-primary">Ask</button></div>
+</div></div></div></div>
+<script>
+document.getElementById('askBtn').addEventListener('click',function(){
+    let q = document.getElementById('userQuestion').value;
+    if(!q.trim()) return;
+    let chat = document.getElementById('chatBox');
+    chat.innerHTML += `<div class="alert alert-info">You: ${q}</div>`;
+    fetch('/ask_mentor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})})
+    .then(r=>r.json()).then(data=>{chat.innerHTML += `<div class="alert alert-secondary">Mentor: ${data.reply}</div>`; chat.scrollTop = chat.scrollHeight;});
+    document.getElementById('userQuestion').value = '';
+});
+</script>
+{% endblock %}

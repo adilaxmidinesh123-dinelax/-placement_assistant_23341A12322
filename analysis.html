@@ -1,0 +1,12 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="row"><div class="col-md-12"><div class="card shadow"><div class="card-header bg-info text-white"><h4>📊 Detailed Resume Analysis</h4></div><div class="card-body">
+<p><strong>Target:</strong> {{ company }} | <strong>Role:</strong> {{ role }}</p>
+<p><strong>Education:</strong> {{ education }}</p>
+<h5>🔧 Skills Found</h5><ul>{% for s in skills %}<li>{{ s }}</li>{% endfor %}</ul>
+<h5>📁 Projects</h5><ul>{% for p in projects %}<li>{{ p }}</li>{% endfor %}</ul>
+<h5>✅ Strengths</h5><ul>{% for s in strengths %}<li>{{ s }}</li>{% endfor %}</ul>
+<h5>⚠️ Weak Areas (from resume)</h5><ul>{% for w in weak_resume %}<li>{{ w }}</li>{% endfor %}</ul>
+<h5>🔴 Missing Skills for {{ company }}</h5><ul>{% for m in missing %}<li>{{ m }}</li>{% endfor %}</ul>
+</div></div></div></div>
+{% endblock %}

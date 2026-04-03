@@ -1,0 +1,10 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="row"><div class="col-md-10 mx-auto"><div class="card shadow"><div class="card-header bg-primary text-white"><h4>🏆 Leaderboard</h4></div><div class="card-body">
+<table class="table table-striped"><thead><tr><th>Rank</th><th>Name</th><th>Email</th><th>Avg Score</th><th>Questions Answered</th></tr></thead><tbody>
+{% for user in users %}
+<tr><td>{{ loop.index }}</td><td>{{ user.name }}</td><td>{{ user.email }}</td><td>{{ user.avg_score }}</td><td>{{ user.total_answers }}</td></tr>
+{% endfor %}
+</tbody></table>
+</div></div></div></div>
+{% endblock %}

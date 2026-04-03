@@ -1,0 +1,12 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="row"><div class="col-md-6 mx-auto"><div class="card shadow"><div class="card-header bg-warning text-dark"><h4>🧠 Daily Aptitude</h4></div><div class="card-body">
+<p><strong>{{ question }}</strong></p>
+<form method="POST" action="{{ url_for('check_aptitude') }}">
+    {% for opt in options %}
+    <div class="form-check"><input class="form-check-input" type="radio" name="answer" value="{{ opt }}" id="opt{{ loop.index }}"><label class="form-check-label" for="opt{{ loop.index }}">{{ opt }}</label></div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+</div></div></div></div>
+{% endblock %}

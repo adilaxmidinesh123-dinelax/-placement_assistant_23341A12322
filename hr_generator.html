@@ -1,0 +1,23 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header bg-warning">📝 HR Answer Generator</div>
+    <div class="card-body">
+        <input id="hrQuestion" class="form-control" placeholder="e.g., Tell me about yourself">
+        <button id="genBtn" class="btn btn-primary mt-2">Generate Answer</button>
+        <div id="hrAnswer" class="mt-3"></div>
+    </div>
+</div>
+<script>
+document.getElementById('genBtn').onclick = () => {
+    let q = document.getElementById('hrQuestion').value;
+    fetch('/hr_generator', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({question: q})
+    }).then(r=>r.json()).then(d=>{
+        document.getElementById('hrAnswer').innerHTML = `<div class="alert alert-success">${d.answer}</div>`;
+    });
+};
+</script>
+{% endblock %}

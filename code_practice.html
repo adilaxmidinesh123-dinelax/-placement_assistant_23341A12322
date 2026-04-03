@@ -1,0 +1,50 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row"><div class="col-md-12"><h2 class="mb-3">💻 Code Practice Space</h2><p>Solve coding problems, write Python/JavaScript, and run code instantly.</p></div></div>
+    <div class="row">
+        <div class="col-md-3"><div class="card"><div class="card-header bg-primary text-white"><h5>📋 Problems</h5></div><div class="card-body" style="max-height:500px;overflow-y:auto;"><div class="list-group" id="problemList"><a href="#" class="list-group-item list-group-item-action active" data-problem="0">1. Two Sum</a><a href="#" class="list-group-item list-group-item-action" data-problem="1">2. Reverse a String</a><a href="#" class="list-group-item list-group-item-action" data-problem="2">3. FizzBuzz</a><a href="#" class="list-group-item list-group-item-action" data-problem="3">4. Palindrome Check</a><a href="#" class="list-group-item list-group-item-action" data-problem="4">5. Factorial</a></div></div></div></div>
+        <div class="col-md-6"><div class="card"><div class="card-header bg-success text-white d-flex justify-content-between"><span>✏️ Code Editor</span><div><select id="languageSelect" class="form-select form-select-sm" style="width:120px;display:inline-block;"><option value="python">Python 3</option><option value="javascript">JavaScript (Node.js)</option></select><button id="runCodeBtn" class="btn btn-sm btn-warning ms-2">▶ Run</button></div></div><div class="card-body"><textarea id="codeEditor" rows="15" class="form-control font-monospace" style="font-family:monospace;font-size:14px;"># Write your code here
+def two_sum(nums, target):
+    # Your implementation
+    pass
+
+# Test
+print(two_sum([2,7,11,15], 9))</textarea></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-header bg-info text-white"><h5>📤 Output</h5></div><div class="card-body" style="max-height:500px;overflow-y:auto;"><pre id="outputArea" style="background:#f4f4f4;padding:10px;border-radius:5px;">Click "Run" to see output...</pre></div></div></div>
+    </div>
+    <div class="row mt-3"><div class="col-md-12"><div class="card"><div class="card-header bg-secondary text-white"><h5>📖 Problem Description</h5></div><div class="card-body" id="problemDesc"><h4>1. Two Sum</h4><p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers that add up to <code>target</code>. You may assume exactly one solution.</p><p><strong>Example:</strong><br>Input: nums = [2,7,11,15], target = 9<br>Output: [0,1]</p></div></div></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+const problems = [
+    {title:"1. Two Sum",description:"Given an array of integers `nums` and an integer `target`, return indices of the two numbers that add up to `target`. You may assume exactly one solution.",starter_python:`def two_sum(nums, target):\n    # Write your code here\n    pass\n\n# Test\nnums = [2, 7, 11, 15]\ntarget = 9\nresult = two_sum(nums, target)\nprint(f"Indices: {result}")`,starter_js:`function twoSum(nums, target) {\n    // Write your code here\n}\n\nconst nums = [2, 7, 11, 15];\nconst target = 9;\nconsole.log(twoSum(nums, target));`},
+    {title:"2. Reverse a String",description:"Write a function that reverses a string. Example: input 'hello' → output 'olleh'",starter_python:`def reverse_string(s):\n    return s[::-1]\n\nprint(reverse_string("hello"))`,starter_js:`function reverseString(s) {\n    return s.split('').reverse().join('');\n}\n\nconsole.log(reverseString("hello"));`},
+    {title:"3. FizzBuzz",description:"Print numbers from 1 to n, but for multiples of 3 print 'Fizz', for multiples of 5 print 'Buzz', for multiples of both print 'FizzBuzz'.",starter_python:`def fizzbuzz(n):\n    for i in range(1, n+1):\n        if i%3==0 and i%5==0: print("FizzBuzz")\n        elif i%3==0: print("Fizz")\n        elif i%5==0: print("Buzz")\n        else: print(i)\n\nfizzbuzz(15)`,starter_js:`function fizzbuzz(n) {\n    for (let i=1; i<=n; i++) {\n        if (i%15===0) console.log("FizzBuzz");\n        else if (i%3===0) console.log("Fizz");\n        else if (i%5===0) console.log("Buzz");\n        else console.log(i);\n    }\n}\n\nfizzbuzz(15);`},
+    {title:"4. Palindrome Check",description:"Check if a given string is a palindrome (reads same forwards and backwards). Ignore case and non-alphanumeric characters.",starter_python:`def is_palindrome(s):\n    cleaned = ''.join(c.lower() for c in s if c.isalnum())\n    return cleaned == cleaned[::-1]\n\nprint(is_palindrome("A man, a plan, a canal: Panama"))`,starter_js:`function isPalindrome(s) {\n    const cleaned = s.toLowerCase().replace(/[^a-z0-9]/g, '');\n    return cleaned === cleaned.split('').reverse().join('');\n}\n\nconsole.log(isPalindrome("A man, a plan, a canal: Panama"));`},
+    {title:"5. Factorial",description:"Compute the factorial of a non-negative integer n (n!). Example: 5! = 120.",starter_python:`def factorial(n):\n    if n==0: return 1\n    return n * factorial(n-1)\n\nprint(factorial(5))`,starter_js:`function factorial(n) {\n    if (n===0) return 1;\n    return n * factorial(n-1);\n}\n\nconsole.log(factorial(5));`}
+];
+function loadProblem(index){
+    const prob=problems[index];
+    document.getElementById("problemDesc").innerHTML=`<h4>${prob.title}</h4><p>${prob.description}</p>`;
+    const lang=document.getElementById("languageSelect").value;
+    document.getElementById("codeEditor").value=lang==="python"?prob.starter_python:prob.starter_js;
+}
+document.querySelectorAll("#problemList a").forEach(link=>{link.addEventListener("click",(e)=>{e.preventDefault();document.querySelectorAll("#problemList a").forEach(l=>l.classList.remove("active"));link.classList.add("active");loadProblem(parseInt(link.getAttribute("data-problem")));});});
+document.getElementById("languageSelect").addEventListener("change",()=>{const active=document.querySelector("#problemList a.active");if(active)loadProblem(parseInt(active.getAttribute("data-problem")));});
+document.getElementById("runCodeBtn").addEventListener("click",async()=>{
+    const code=document.getElementById("codeEditor").value;
+    const lang=document.getElementById("languageSelect").value;
+    const outPre=document.getElementById("outputArea");
+    outPre.textContent="Running...";
+    let languageId=lang==="python"?"python":"javascript";
+    let version=lang==="python"?"3.10.0":"18.15.0";
+    try{
+        const res=await axios.post("https://emkc.org/api/v2/piston/execute",{language:languageId,version:version,files:[{content:code}]});
+        const err=res.data.run.stderr;
+        if(err)outPre.textContent="Error:\n"+err;
+        else outPre.textContent=res.data.run.output||"(No output)";
+    }catch(e){outPre.textContent="Execution failed: "+e.message;}
+});
+</script>
+{% endblock %}

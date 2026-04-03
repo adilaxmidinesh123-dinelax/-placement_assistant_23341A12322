@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <h2>✏️ Resume Builder</h2>
+    <p>Edit your details. Data from your uploaded resume is pre-filled.</p>
+    <form id="resumeForm">
+        <div class="row"><div class="col-md-6"><label>Full Name</label><input type="text" class="form-control" id="full_name" value="{{ full_name }}"></div>
+        <div class="col-md-6"><label>Email</label><input type="email" class="form-control" id="email" value="{{ email }}"></div></div>
+        <div class="row mt-2"><div class="col-md-6"><label>Phone</label><input type="text" class="form-control" id="phone" value="{{ phone }}"></div>
+        <div class="col-md-6"><label>Address</label><input type="text" class="form-control" id="address" value="{{ address }}"></div></div>
+        <div class="mt-2"><label>Professional Summary</label><textarea class="form-control" id="summary" rows="3">{{ summary }}</textarea></div>
+        <h5 class="mt-3">Skills</h5><div id="skills-container">{% for skill in skills_list %}<div class="input-group mb-2"><input type="text" class="form-control skill-input" value="{{ skill }}"><button type="button" class="btn btn-danger remove-skill">-</button></div>{% endfor %}</div>
+        <button type="button" id="add-skill" class="btn btn-sm btn-secondary">+ Add Skill</button>
+        <h5 class="mt-3">Projects</h5><div id="projects-container">{% for proj in projects_list %}<div class="card mb-2 p-2"><input type="text" class="form-control mb-1 proj-title" placeholder="Project Title" value="{{ proj.title }}"><textarea class="form-control proj-desc" placeholder="Description">{{ proj.description }}</textarea><button type="button" class="btn btn-danger btn-sm remove-project mt-1">Remove</button></div>{% endfor %}</div>
+        <button type="button" id="add-project" class="btn btn-sm btn-secondary">+ Add Project</button>
+        <h5 class="mt-3">Education</h5><div id="education-container">{% for edu in education_list %}<div class="card mb-2 p-2"><input type="text" class="form-control mb-1 edu-degree" placeholder="Degree" value="{{ edu.degree }}"><input type="text" class="form-control mb-1 edu-institution" placeholder="Institution" value="{{ edu.institution }}"><input type="text" class="form-control mb-1 edu-year" placeholder="Year" value="{{ edu.year }}"><button type="button" class="btn btn-danger btn-sm remove-edu">Remove</button></div>{% endfor %}</div>
+        <button type="button" id="add-edu" class="btn btn-sm btn-secondary">+ Add Education</button>
+        <h5 class="mt-3">Experience</h5><div id="experience-container">{% for exp in experience_list %}<div class="card mb-2 p-2"><input type="text" class="form-control mb-1 exp-title" placeholder="Job Title" value="{{ exp.title }}"><input type="text" class="form-control mb-1 exp-company" placeholder="Company" value="{{ exp.company }}"><input type="text" class="form-control mb-1 exp-duration" placeholder="Duration" value="{{ exp.duration }}"><textarea class="form-control exp-desc" placeholder="Description">{{ exp.description }}</textarea><button type="button" class="btn btn-danger btn-sm remove-exp mt-1">Remove</button></div>{% endfor %}</div>
+        <button type="button" id="add-exp" class="btn btn-sm btn-secondary">+ Add Experience</button>
+        <div class="mt-3"><label>Select Template</label><select id="template_choice" class="form-select"><option value="professional" {% if template_choice=='professional' %}selected{% endif %}>Professional</option><option value="modern" {% if template_choice=='modern' %}selected{% endif %}>Modern Tech</option><option value="minimal" {% if template_choice=='minimal' %}selected{% endif %}>Minimal</option></select></div>
+        <div class="mt-4"><button type="button" id="saveResumeBtn" class="btn btn-primary">Save & Preview</button><a href="{{ url_for('dashboard') }}" class="btn btn-secondary ms-2">Cancel</a></div>
+    </form>
+</div>
+<script>
+document.getElementById('saveResumeBtn').addEventListener('click',()=>{
+    let skills=[...document.querySelectorAll('.skill-input')].map(i=>i.value.trim()).filter(v=>v);
+    let projects=[...document.querySelectorAll('#projects-container .card')].map(c=>{return{title:c.querySelector('.proj-title').value,description:c.querySelector('.proj-desc').value};}).filter(p=>p.title.trim()||p.description.trim());
+    let education=[...document.querySelectorAll('#education-container .card')].map(c=>{return{degree:c.querySelector('.edu-degree').value,institution:c.querySelector('.edu-institution').value,year:c.querySelector('.edu-year').value};}).filter(e=>e.degree.trim()||e.institution.trim());
+    let experience=[...document.querySelectorAll('#experience-container .card')].map(c=>{return{title:c.querySelector('.exp-title').value,company:c.querySelector('.exp-company').value,duration:c.querySelector('.exp-duration').value,description:c.querySelector('.exp-desc').value};}).filter(ex=>ex.title.trim()||ex.company.trim());
+    let data={full_name:document.getElementById('full_name').value,email:document.getElementById('email').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,summary:document.getElementById('summary').value,skills:skills,projects:projects,education:education,experience:experience,template_choice:document.getElementById('template_choice').value};
+    fetch('/save_resume_data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>r.json()).then(d=>{if(d.status==='success')window.location.href='/preview_resume';else alert('Error');});
+});
+document.getElementById('add-skill').addEventListener('click',()=>{let div=document.createElement('div');div.className='input-group mb-2';div.innerHTML='<input type="text" class="form-control skill-input"><button type="button" class="btn btn-danger remove-skill">-</button>';document.getElementById('skills-container').appendChild(div);div.querySelector('.remove-skill').addEventListener('click',()=>div.remove());});
+document.querySelectorAll('.remove-skill').forEach(btn=>btn.addEventListener('click',function(){this.parentElement.remove();}));
+document.getElementById('add-project').addEventListener('click',()=>{let div=document.createElement('div');div.className='card mb-2 p-2';div.innerHTML='<input type="text" class="form-control mb-1 proj-title" placeholder="Project Title"><textarea class="form-control proj-desc" placeholder="Description"></textarea><button type="button" class="btn btn-danger btn-sm remove-project mt-1">Remove</button>';document.getElementById('projects-container').appendChild(div);div.querySelector('.remove-project').addEventListener('click',()=>div.remove());});
+document.querySelectorAll('.remove-project').forEach(btn=>btn.addEventListener('click',function(){this.closest('.card').remove();}));
+document.getElementById('add-edu').addEventListener('click',()=>{let div=document.createElement('div');div.className='card mb-2 p-2';div.innerHTML='<input type="text" class="form-control mb-1 edu-degree" placeholder="Degree"><input type="text" class="form-control mb-1 edu-institution" placeholder="Institution"><input type="text" class="form-control mb-1 edu-year" placeholder="Year"><button type="button" class="btn btn-danger btn-sm remove-edu">Remove</button>';document.getElementById('education-container').appendChild(div);div.querySelector('.remove-edu').addEventListener('click',()=>div.remove());});
+document.querySelectorAll('.remove-edu').forEach(btn=>btn.addEventListener('click',function(){this.closest('.card').remove();}));
+document.getElementById('add-exp').addEventListener('click',()=>{let div=document.createElement('div');div.className='card mb-2 p-2';div.innerHTML='<input type="text" class="form-control mb-1 exp-title" placeholder="Job Title"><input type="text" class="form-control mb-1 exp-company" placeholder="Company"><input type="text" class="form-control mb-1 exp-duration" placeholder="Duration"><textarea class="form-control exp-desc" placeholder="Description"></textarea><button type="button" class="btn btn-danger btn-sm remove-exp mt-1">Remove</button>';document.getElementById('experience-container').appendChild(div);div.querySelector('.remove-exp').addEventListener('click',()=>div.remove());});
+document.querySelectorAll('.remove-exp').forEach(btn=>btn.addEventListener('click',function(){this.closest('.card').remove();}));
+</script>
+{% endblock %}

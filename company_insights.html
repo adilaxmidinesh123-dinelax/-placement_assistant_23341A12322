@@ -1,0 +1,12 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header bg-dark text-white">🏢 Company Insights: {{ insight.company_name }}</div>
+    <div class="card-body">
+        <p><strong>Hiring Pattern:</strong> {{ insight.hiring_pattern }}</p>
+        <p><strong>Previous Questions:</strong> {{ insight.previous_questions }}</p>
+        <p><strong>Salary Range:</strong> {{ insight.salary_range }}</p>
+        <p><strong>Difficulty:</strong> {{ insight.difficulty }}</p>
+    </div>
+</div>
+{% endblock %}

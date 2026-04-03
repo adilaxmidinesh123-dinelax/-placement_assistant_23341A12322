@@ -1,0 +1,15 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-80">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">🚀 AI-Powered Placement Preparation</h1>
+        <p class="lead mb-4">Get personalized interview training based on your resume and target company</p>
+        <div class="row mt-5">
+            <div class="col-md-4 mb-3"><div class="card h-100"><div class="card-body"><i class="fas fa-file-alt fa-3x text-primary mb-3"></i><h5>Resume Analysis</h5><p>Extract skills, projects, and get detailed feedback</p></div></div></div>
+            <div class="col-md-4 mb-3"><div class="card h-100"><div class="card-body"><i class="fas fa-question-circle fa-3x text-primary mb-3"></i><h5>Company Questions</h5><p>Practice with company-specific interview questions</p></div></div></div>
+            <div class="col-md-4 mb-3"><div class="card h-100"><div class="card-body"><i class="fas fa-road fa-3x text-primary mb-3"></i><h5>Personalized Roadmap</h5><p>2-4 week study plan tailored to your weak areas</p></div></div></div>
+        </div>
+        <div class="mt-4"><a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-2">Get Started</a><a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">Login</a></div>
+    </div>
+</div>
+{% endblock %}

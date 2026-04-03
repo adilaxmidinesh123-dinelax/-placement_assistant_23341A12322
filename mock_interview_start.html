@@ -1,0 +1,13 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white"><h4>🎤 Mock Interview Simulator</h4></div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3"><label>Company</label><input type="text" name="company" class="form-control" required></div>
+            <div class="mb-3"><label>Job Role</label><input type="text" name="role" class="form-control" required></div>
+            <button class="btn btn-primary">Start Mock Interview</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

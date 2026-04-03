@@ -1,0 +1,21 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<h3>📊 Your Progress Dashboard</h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card"><div class="card-header">Scores Trend</div><div class="card-body">
+            <canvas id="scoreChart" height="200"></canvas>
+        </div></div>
+    </div>
+    <div class="col-md-6">
+        <div class="card"><div class="card-header">Weak Areas</div><div class="card-body">
+            <ul>{% for w in weak_areas %}<li>{{ w.topic }}</li>{% endfor %}</ul>
+        </div></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const scores = {{ scores|tojson }};
+new Chart(document.getElementById('scoreChart'), { type: 'line', data: { labels: scores.map((_,i)=>i+1), datasets: [{ label: 'Answer Scores', data: scores, borderColor: 'blue' }] } });
+</script>
+{% endblock %}
